@@ -1,5 +1,4 @@
 //jshint esversion:6
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -14,7 +13,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://@cluster0-d8bf2.mongodb.net/todolist", {
+mongoose.connect("mongodb+srv://dea:chat24@cluster0-d8bf2.mongodb.net/todolistDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -37,13 +36,11 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
-
 const listSchema = {
   name: String,
   items: [itemsSchema]
 };
 const List = mongoose.model("List", listSchema);
-
 
 app.get("/", function (req, res) {
   Item.find({}, function (err, foundItems) {
@@ -66,14 +63,11 @@ app.get("/", function (req, res) {
 });
 
 app.post("/", function (req, res) {
-
   const itemName = req.body.newItem;
   const listName = req.body.list;
-
   const item = new Item({
     name: itemName
   });
-
   if (listName === "Today") {
     item.save();
     res.redirect("/");
@@ -91,7 +85,6 @@ app.post("/", function (req, res) {
 app.post("/delete", function (req, res) {
   const checkedItemId = req.body.checkbox;
   const listName = req.body.listName;
-
   if (listName === "Today") {
     Item.findByIdAndRemove(checkedItemId, function (err) {
       if (err) {
@@ -116,7 +109,6 @@ app.post("/delete", function (req, res) {
       }
     });
   }
-
 });
 
 app.get("/:customListName", function (req, res) {
@@ -139,9 +131,7 @@ app.get("/:customListName", function (req, res) {
         });
       }
     }
-
   });
-
 });
 
 app.get("/about", function (req, res) {
